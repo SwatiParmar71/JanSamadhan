@@ -1,143 +1,195 @@
-import React, { useState } from 'react';
-import { IoSearchSharp } from 'react-icons/io5';
+import React, { useState } from "react";
+import { ThumbsDown, AlertCircle, CheckCircle2, LayoutGrid, List } from "lucide-react";
 
-const Complaints = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [showForwardModal, setShowForwardModal] = useState(false);
-  const [selectedComplaint, setSelectedComplaint] = useState(null);
-  const [forwardedComplaints, setForwardedComplaints] = useState([]);
-  const [activeTab, setActiveTab] = useState('complaints');
+const ComplaintsPage = () => {
+  const [view, setView] = useState("table"); // table | card | list
 
-  const departments = ['Road Transport', 'Water', 'Civil', 'Electrical', 'Mechanical'];
-
-  const [complaints, setComplaints] = useState([
-    { id: 'C1234', name: 'Raj Kumar Sharma', subject: 'Street Lights not working', date: '17/2/2024', location: 'Baner, Pune' },
-    { id: 'C1235', name: 'Aarti Patel', subject: 'Dustbins are overflowing', date: '20/2/2024', location: 'Hadapsar, Pune' },
-    { id: 'C1236', name: 'Vikas Jain', subject: 'Water supply interruptions', date: '22/2/2024', location: 'Kothrud, Pune' },
-    { id: 'C1237', name: 'Nisha Verma', subject: 'Potholes on the road', date: '23/2/2024', location: 'Pune University, Pune' },
-    { id: 'C1238', name: 'Manoj Kumar', subject: 'Leaking water pipes', date: '25/2/2024', location: 'Viman Nagar, Pune' },
-    { id: 'C1239', name: 'Pooja Joshi', subject: 'Broken streetlights', date: '26/2/2024', location: 'Aundh, Pune' },
-    { id: 'C1240', name: 'Anil Patil', subject: 'Damaged footpath', date: '28/2/2024', location: 'Koregaon Park, Pune' },
-    { id: 'C1241', name: 'Rohit Bhatia', subject: 'Broken water tank', date: '1/3/2024', location: 'Bavdhan, Pune' },
-    { id: 'C1242', name: 'Sunita Reddy', subject: 'Garbage piling up', date: '5/3/2024', location: 'Camp, Pune' },
-    { id: 'C1243', name: 'Aditya Mehta', subject: 'Electrical wire exposed', date: '7/3/2024', location: 'Pashan, Pune' },
-    { id: 'C1244', name: 'Priya Singh', subject: 'Uneven road surface', date: '9/3/2024', location: 'Dhole Patil Road, Pune' },
-    { id: 'C1245', name: 'Suresh Yadav', subject: 'Broken drainage system', date: '10/3/2024', location: 'Hadapsar, Pune' },
-    { id: 'C1246', name: 'Amit Sharma', subject: 'Water leakage in basement', date: '12/3/2024', location: 'Baner, Pune' },
-    { id: 'C1247', name: 'Kavita Mishra', subject: 'Lack of bus stops', date: '14/3/2024', location: 'Magarpatta, Pune' },
-    { id: 'C1248', name: 'Deepak Gupta', subject: 'Damaged road signs', date: '15/3/2024', location: 'Vishrantwadi, Pune' },
+  const [complaints] = useState([
+    {
+      id: "C101",
+      name: "Rahul Kumar",
+      service: "Streetlight Repair",
+      date: "2025-09-12",
+      location: "Ranchi, Jharkhand",
+      status: "Not Solved",
+      feedback: "Light still not working after visit",
+    },
+    {
+      id: "C102",
+      name: "Anjali Singh",
+      service: "Garbage Collection",
+      date: "2025-09-10",
+      location: "Dhanbad, Jharkhand",
+      status: "Not Satisfactory",
+      feedback: "Garbage picked up but area left dirty",
+    },
+    {
+      id: "C103",
+      name: "Suresh Das",
+      service: "Water Supply",
+      date: "2025-09-08",
+      location: "Jamshedpur, Jharkhand",
+      status: "Solved",
+      feedback: "Issue resolved, water supply restored",
+    },
+    {
+      id: "C104",
+      name: "Priya Verma",
+      service: "Road Repair",
+      date: "2025-09-07",
+      location: "Hazaribagh, Jharkhand",
+      status: "Not Solved",
+      feedback: "Potholes still not filled properly",
+    },
+    {
+      id: "C105",
+      name: "Amit Yadav",
+      service: "Drainage Cleaning",
+      date: "2025-09-06",
+      location: "Bokaro, Jharkhand",
+      status: "Solved",
+      feedback: "Drainage cleaned well, no flooding now",
+    },
+    {
+      id: "C106",
+      name: "Neha Kumari",
+      service: "Public Toilet Maintenance",
+      date: "2025-09-05",
+      location: "Giridih, Jharkhand",
+      status: "Not Satisfactory",
+      feedback: "Toilet cleaned but water supply missing",
+    },
+    {
+      id: "C107",
+      name: "Ravi Shankar",
+      service: "Street Sweeping",
+      date: "2025-09-04",
+      location: "Deoghar, Jharkhand",
+      status: "Solved",
+      feedback: "Area looks clean now",
+    },
+    {
+      id: "C108",
+      name: "Meena Kumari",
+      service: "Water Pipeline Leakage",
+      date: "2025-09-03",
+      location: "Chatra, Jharkhand",
+      status: "Not Solved",
+      feedback: "Leakage still continues near my house",
+    },
+    {
+      id: "C109",
+      name: "Sunil Mishra",
+      service: "Garbage Collection",
+      date: "2025-09-02",
+      location: "Latehar, Jharkhand",
+      status: "Solved",
+      feedback: "Garbage collected on time",
+    },
+    {
+      id: "C110",
+      name: "Pooja Sharma",
+      service: "Streetlight Repair",
+      date: "2025-09-01",
+      location: "Palamu, Jharkhand",
+      status: "Not Satisfactory",
+      feedback: "Some lights fixed, some still not working",
+    },
   ]);
 
-  const filteredComplaints = complaints.filter((complaint) =>
-    complaint.subject.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  const handleForwardClick = (complaint) => {
-    setSelectedComplaint(complaint);
-    setShowForwardModal(true);
-  };
-
-  const handleForwardSubmit = (dept) => {
-    if (selectedComplaint) {
-      setForwardedComplaints([...forwardedComplaints, { ...selectedComplaint, forwardedTo: dept }]);
-      setShowForwardModal(false);
+  const getStatusBadge = (status) => {
+    if (status === "Solved") {
+      return (
+        <span className="flex items-center gap-1 text-green-600 font-semibold">
+          <CheckCircle2 size={18} /> Solved
+        </span>
+      );
     }
+    if (status === "Not Solved") {
+      return (
+        <span className="flex items-center gap-1 text-red-600 font-semibold">
+          <AlertCircle size={18} /> Not Solved
+        </span>
+      );
+    }
+    return (
+      <span className="flex items-center gap-1 text-yellow-600 font-semibold">
+        <ThumbsDown size={18} /> Not Satisfactory
+      </span>
+    );
   };
 
   return (
-    <div className="mx-auto p-4 bg-gray-100 min-h-screen">
-      {/* Tabs Section */}
-      <div className="flex gap-4 mb-4 justify-center">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 to-green-100 p-6">
+      {/* Header */}
+      <h1 className="text-3xl font-bold text-center text-green-700 mb-6 drop-shadow">
+        📝 Service Complaints – Jharkhand
+      </h1>
+
+      {/* View Switch Buttons */}
+      <div className="flex justify-center gap-4 mb-6">
         <button
-          onClick={() => setActiveTab('complaints')}
-          className={`p-2 w-full max-w-xs rounded-md text-sm md:text-base ${
-            activeTab === 'complaints' ? 'bg-blue-700 text-white' : 'bg-gray-300 text-gray-700'
+          onClick={() => setView("table")}
+          className={`px-4 py-2 rounded-lg flex items-center gap-2 shadow ${
+            view === "table"
+              ? "bg-green-700 text-white"
+              : "bg-white text-green-700 border border-green-300"
           }`}
         >
-          Complaints
+          <LayoutGrid size={18} /> Table View
         </button>
         <button
-          onClick={() => setActiveTab('forwarded')}
-          className={`p-2 w-full max-w-xs rounded-md text-sm md:text-base ${
-            activeTab === 'forwarded' ? 'bg-blue-700 text-white' : 'bg-gray-300 text-gray-700'
+          onClick={() => setView("card")}
+          className={`px-4 py-2 rounded-lg flex items-center gap-2 shadow ${
+            view === "card"
+              ? "bg-green-700 text-white"
+              : "bg-white text-green-700 border border-green-300"
           }`}
         >
-          Forwarded Complaints
+          <LayoutGrid size={18} /> Card View
+        </button>
+        <button
+          onClick={() => setView("list")}
+          className={`px-4 py-2 rounded-lg flex items-center gap-2 shadow ${
+            view === "list"
+              ? "bg-green-700 text-white"
+              : "bg-white text-green-700 border border-green-300"
+          }`}
+        >
+          <List size={18} /> List View
         </button>
       </div>
 
-      {/* Complaints Section */}
-      {activeTab === 'complaints' && (
-        <div>
-          <div className="flex items-center gap-2 mb-4">
-            <input
-              type="text"
-              placeholder="Search..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="border rounded-md p-2 w-full shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            <IoSearchSharp size={24} className="cursor-pointer text-blue-700 hover:text-blue-600" />
-          </div>
-          <div className="overflow-x-auto shadow-md rounded-lg">
-            <table className="table-auto w-full text-sm md:text-base">
-              <thead className="bg-blue-700 text-white">
-                <tr>
-                  <th className="px-2 py-2 text-center">C-id</th>
-                  <th className="px-2 py-2 text-center">Name</th>
-                  <th className="px-2 py-2 text-center">Subject</th>
-                  <th className="px-2 py-2 text-center">Date</th>
-                  <th className="px-2 py-2 text-center">Location</th>
-                  <th className="px-2 py-2 text-center">Forward</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredComplaints.map((complaint) => (
-                  <tr key={complaint.id} className="border-b hover:bg-gray-100">
-                    <td className="px-2 py-2 text-center">{complaint.id}</td>
-                    <td className="px-2 py-2 text-center">{complaint.name}</td>
-                    <td className="px-2 py-2 text-center">{complaint.subject}</td>
-                    <td className="px-2 py-2 text-center">{complaint.date}</td>
-                    <td className="px-2 py-2 text-center">{complaint.location}</td>
-                    <td className="px-2 py-2 text-center">
-                      <button
-                        onClick={() => handleForwardClick(complaint)}
-                        className="border rounded-md p-2 bg-green-100 text-green-700 hover:bg-green-200"
-                      >
-                        Forward
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      )}
-
-      {/* Forwarded Complaints Section */}
-      {activeTab === 'forwarded' && (
-        <div className="overflow-x-auto shadow-md rounded-lg">
-          <table className="table-auto w-full text-sm md:text-base">
+      {/* Table View */}
+      {view === "table" && (
+        <div className="overflow-x-auto bg-white shadow-2xl rounded-xl border border-green-200">
+          <table className="w-full text-left border-collapse">
             <thead className="bg-green-700 text-white">
               <tr>
-                <th className="px-2 py-2 text-center">F-id</th>
-                <th className="px-2 py-2 text-center">Name</th>
-                <th className="px-2 py-2 text-center">Subject</th>
-                <th className="px-2 py-2 text-center">Date</th>
-                <th className="px-2 py-2 text-center">Location</th>
-                <th className="px-2 py-2 text-center">Forwarded To</th>
+                <th className="p-3">Complaint ID</th>
+                <th className="p-3">Name</th>
+                <th className="p-3">Service</th>
+                <th className="p-3">Date</th>
+                <th className="p-3">Location</th>
+                <th className="p-3">Status</th>
+                <th className="p-3">Feedback</th>
               </tr>
             </thead>
             <tbody>
-              {forwardedComplaints.map((complaint) => (
-                <tr key={complaint.id} className="border-b hover:bg-gray-100">
-                  <td className="px-2 py-2 text-center">{complaint.id}</td>
-                  <td className="px-2 py-2 text-center">{complaint.name}</td>
-                  <td className="px-2 py-2 text-center">{complaint.subject}</td>
-                  <td className="px-2 py-2 text-center">{complaint.date}</td>
-                  <td className="px-2 py-2 text-center">{complaint.location}</td>
-                  <td className="px-2 py-2 text-center">{complaint.forwardedTo}</td>
+              {complaints.map((c, index) => (
+                <tr
+                  key={c.id}
+                  className={`border-b ${
+                    index % 2 === 0 ? "bg-green-50" : "bg-white"
+                  } hover:bg-green-100 transition`}
+                >
+                  <td className="p-3 font-semibold text-gray-700">{c.id}</td>
+                  <td className="p-3">{c.name}</td>
+                  <td className="p-3">{c.service}</td>
+                  <td className="p-3">{c.date}</td>
+                  <td className="p-3">{c.location}</td>
+                  <td className="p-3">{getStatusBadge(c.status)}</td>
+                  <td className="p-3 text-gray-700">{c.feedback}</td>
                 </tr>
               ))}
             </tbody>
@@ -145,42 +197,59 @@ const Complaints = () => {
         </div>
       )}
 
-      {/* Forward Modal */}
-      {showForwardModal && selectedComplaint && (
-        <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white p-6 rounded-lg w-11/12 max-w-md">
-            <h3 className="text-lg md:text-xl font-semibold mb-4">Forward Complaint</h3>
-            <div>
-              <p><strong>Name:</strong> {selectedComplaint.name}</p>
-              <p><strong>Subject:</strong> {selectedComplaint.subject}</p>
-              <p><strong>Date:</strong> {selectedComplaint.date}</p>
-              <p><strong>Location:</strong> {selectedComplaint.location}</p>
+      {/* Card View */}
+      {view === "card" && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {complaints.map((c) => (
+            <div
+              key={c.id}
+              className="bg-white shadow-xl rounded-xl p-4 border border-green-200 hover:shadow-2xl transition"
+            >
+              <h2 className="font-bold text-lg text-green-700 mb-2">
+                {c.service}
+              </h2>
+              <p>
+                <span className="font-semibold">Complaint ID:</span> {c.id}
+              </p>
+              <p>
+                <span className="font-semibold">Name:</span> {c.name}
+              </p>
+              <p>
+                <span className="font-semibold">Date:</span> {c.date}
+              </p>
+              <p>
+                <span className="font-semibold">Location:</span> {c.location}
+              </p>
+              <p className="mt-2">{getStatusBadge(c.status)}</p>
+              <p className="mt-2 text-gray-700">
+                <span className="font-semibold">Feedback:</span> {c.feedback}
+              </p>
             </div>
-            <div className="mt-4">
-              <h4 className="text-base md:text-lg font-semibold mb-2">Forward to:</h4>
-              <div className="flex flex-col gap-2">
-                {departments.map((dept) => (
-                  <button
-                    key={dept}
-                    onClick={() => handleForwardSubmit(dept)}
-                    className="p-2 bg-blue-600 text-white rounded-md hover:bg-blue-500"
-                  >
-                    {dept}
-                  </button>
-                ))}
-              </div>
-              <button
-                onClick={() => setShowForwardModal(false)}
-                className="mt-4 bg-red-600 text-white p-2 rounded-md hover:bg-red-500"
-              >
-                Close
-              </button>
-            </div>
-          </div>
+          ))}
         </div>
+      )}
+
+      {/* List View */}
+      {view === "list" && (
+        <ul className="bg-white shadow-2xl rounded-xl divide-y divide-green-200 border border-green-200">
+          {complaints.map((c) => (
+            <li key={c.id} className="p-4 hover:bg-green-50 transition">
+              <div className="flex justify-between items-center">
+                <div>
+                  <p className="font-bold text-green-700">{c.service}</p>
+                  <p className="text-sm text-gray-600">
+                    {c.name} • {c.location} • {c.date}
+                  </p>
+                  <p className="text-gray-700">{c.feedback}</p>
+                </div>
+                <div>{getStatusBadge(c.status)}</div>
+              </div>
+            </li>
+          ))}
+        </ul>
       )}
     </div>
   );
 };
 
-export default Complaints;
+export default ComplaintsPage;
